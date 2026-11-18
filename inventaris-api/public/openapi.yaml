@@ -20,7 +20,23 @@ paths:
     get:
       tags: [Products]
       summary: Mengambil seluruh produk
-      description: Mengambil daftar produk dari database
+      description: Mengambil daftar produk, dapat dicari berdasarkan nama dan difilter berdasarkan kategori
+      parameters:
+        - name: search
+          in: query
+          required: false
+          description: Kata kunci pencarian pada nama produk
+          schema:
+            type: string
+          example: Laptop
+        - name: category_id
+          in: query
+          required: false
+          description: Filter produk berdasarkan ID kategori
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
       responses:
         '200':
           description: Daftar produk berhasil diambil
@@ -28,6 +44,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductListResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
     post:
       tags: [Products]
       summary: Menambahkan produk

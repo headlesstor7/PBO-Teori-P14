@@ -13,7 +13,10 @@ class ProductController
     public function index(): void
     {
         Response::success(
-            $this->service->getAll(),
+            $this->service->getAll([
+                'search' => $_GET['search'] ?? '',
+                'category_id' => $_GET['category_id'] ?? ''
+            ]),
             'Daftar produk berhasil diambil'
         );
     }

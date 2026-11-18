@@ -10,11 +10,32 @@ class ProductRepository implements ProductRepositoryInterface
         private PDO $db
     ) {}
 
-    public function getAll(): array
+    public function getAll(array $filters = []): array
     {
-        $sql = "SELECT * FROM products ORDER BY id DESC";
+        $sql = "SELECT * FROM products";
+        $conditions = [];
+        $params = [];
 
-        return $this->db->query($sql)->fetchAll();
+        if (!empty($filters['search'])) {
+            $conditions[] = "name LIKE :search";
+            $params['search'] = '%' . $filters['search'] . '%';
+        }
+
+        if (!empty($filters['category_id'])) {
+            $conditions[] = "category_id = :category_id";
+            $params['category_id'] = $filters['category_id'];
+        }
+
+        if ($conditions) {
+            $sql .= " WHERE " . implode(' AND ', $conditions);
+        }
+
+        $sql .= " ORDER BY id DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll();
     }
 
     public function findById(int $id): ?array

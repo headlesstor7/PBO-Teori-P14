@@ -11,9 +11,27 @@ class ProductService
         private ProductRepositoryInterface $repository
     ) {}
 
-    public function getAll(): array
+    public function getAll(array $filters = []): array
     {
-        return $this->repository->getAll();
+        $clean = [];
+
+        $search = $filters['search'] ?? '';
+        if (is_string($search) && trim($search) !== '') {
+            $clean['search'] = trim($search);
+        }
+
+        $categoryId = $filters['category_id'] ?? '';
+        if ($categoryId !== '') {
+            if (filter_var($categoryId, FILTER_VALIDATE_INT) === false ||
+                (int) $categoryId < 1) {
+                throw new InvalidArgumentException(
+                    'Filter kategori tidak valid'
+                );
+            }
+            $clean['category_id'] = (int) $categoryId;
+        }
+
+        return $this->repository->getAll($clean);
     }
 
     public function getById(int $id): array
