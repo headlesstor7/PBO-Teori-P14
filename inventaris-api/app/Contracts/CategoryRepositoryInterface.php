@@ -1,7 +1,7 @@
 <?php
 namespace App\Contracts;
 
-interface CategoryRepositoryInterface
+interface ProductRepositoryInterface
 {
     public function getAll(): array;
     public function findById(int $id): ?array;
