@@ -2,16 +2,15 @@
 namespace App\Config;
 
 use PDO;
-use PDOException;
 
 class Database
 {
     public static function connection(): PDO
     {
-        $host = $_ENV['DB_HOST'];
-        $name = $_ENV['DB_NAME'];
-        $user = $_ENV['DB_USER'];
-        $pass = $_ENV['DB_PASS'];
+        $host = $_ENV['DB_HOST'] ?? '127.0.0.1';
+        $name = $_ENV['DB_NAME'] ?? 'db_inventaris';
+        $user = $_ENV['DB_USER'] ?? 'root';
+        $pass = $_ENV['DB_PASS'] ?? '';
 
         $dsn = "mysql:host=$host;dbname=$name;charset=utf8mb4";
 
